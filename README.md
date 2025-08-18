@@ -1,71 +1,129 @@
-# Java Web App Deployment with AWS CI/CD
+# 🚀 Full CI/CD Web App Deployment Pipeline on AWS
 
-Welcome to this project combining Java web app development and AWS CI/CD tools!
+## 📖 Overview
+This project demonstrates the implementation of a **fully automated CI/CD pipeline** for deploying a Java-based web application using **AWS DevOps services**.  
 
-<br>
+The pipeline integrates **source control, build automation, artifact management, continuous delivery, and deployment** into a streamlined workflow, ensuring faster and more reliable software delivery.
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Technologies](#technologies)
-- [Setup](#setup)
-- [Contact](#contact)
-- [Conclusion](#conclusion)
+---
 
-<br>
+## 🏗️ Architecture Diagram
+![Architecture Diagram](./architecture-complete%20(1).png)
 
-## Introduction
-This project is used for an introduction to creating and deploying a Java-based web app using AWS, especially their CI/CD tools.
+---
 
-The deployment pipeline I'm building around the Java web app in this repository is invisible to the end-user, but makes a big impact by automating the software release processes.
+## 🔎 Architecture Explanation
 
-- I'm doing this project to learn more about CI/CD and get hands on experience in automating the flow from developing code to deployed web app. 
-- This fits into my career goals because I want to become a DevOps engineer this year!
+1. **IAM User & Key Pair**  
+   - Developers authenticate to AWS using an IAM user with an associated key pair.  
+   - This ensures secure access and role-based permissions for managing resources.
 
-<br>
+2. **Development Environment**  
+   - Core project files:  
+     - `settings.xml` → Maven settings for dependency management.  
+     - `buildspec.yml` → Instructions for AWS CodeBuild (compilation, packaging, and tests).  
+     - `appspec.yml` → Deployment instructions for AWS CodeDeploy.  
+     - Application code (`index.jsp`, `script`, etc.).  
 
-## Technologies
-Here’s what I’m using for this project:
+3. **Source Control with GitHub**  
+   - The web application source code is stored and versioned in GitHub.  
+   - Integrated with AWS via **CodeConnection** for automated webhook triggers.  
 
-- **Amazon EC2**: I'm developing my web app on Amazon EC2 virtual servers, so that software development and deployment happens entirely on the cloud.
-- Key pairs, SSH connections, Git, Maven and Java.
-- **VSCode**: For my IDE, I chose Visual Studio Code. It connects directly to my development EC2 instance, making it easy to edit code and manage files in the cloud.
-- **GitHub**: All my web app code is stored and versioned in this GitHub repository.
-- **[COMING SOON] AWS CodeArtifact**: Once it's rolled out, CodeArtifact will store my artifacts and dependencies, which is great for high availability and speeding up my project's build process.
-- **[COMING SOON] AWS CodeBuild**: Once it's rolled out, CodeBuild will take over my build process. It'll compile the source code, run tests, and produce ready-to-deploy software packages automatically.
-- **[COMING SOON] AWS CodeDeploy**: Once it's rolled out, CodeDeploy will automate my deployment process across EC2 instances.
-- **[COMING SOON] AWS CodePipeline**: Once it's rolled out, CodePipeline will automate the entire process from GitHub to CodeDeploy, integrating build, test, and deployment steps into one efficient workflow.
+4. **AWS CodeArtifact & Policies**  
+   - Used for securely storing and retrieving dependencies.  
+   - CodeArtifact policies define permissions for who/what can access packages.  
 
+5. **AWS CodeBuild**  
+   - Retrieves source from GitHub.  
+   - Uses `buildspec.yml` to build, test, and package the application.  
+   - Uploads build artifacts to **Amazon S3** for storage.  
 
-<br>
+6. **Amazon S3 (Artifact Storage)**  
+   - Stores build artifacts from CodeBuild.  
+   - Acts as a staging area before deployment.  
 
-## Setup
-To get this project up and running on your local machine, follow these steps:
+7. **AWS CodeDeploy**  
+   - Pulls artifacts from S3.  
+   - Uses `appspec.yml` to define deployment steps (e.g., stop old app, install new version).  
+   - Deploys to **EC2 instances** running inside a **VPC**.  
 
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/nextwork-web-project.git
-    ```
-2. Navigate to the project directory:
-    ```bash
-    cd nextwork-web-project
-    ```
-3. Install dependencies:
-    ```bash
-    mvn install
-    ```
+8. **AWS CloudFormation**  
+   - Automates infrastructure provisioning (VPC, EC2 instances, IAM roles, etc.).  
+   - Ensures infrastructure consistency and repeatability.  
 
-<br>
+9. **Web Server & Live Website**  
+   - EC2 hosts the web app, deployed by CodeDeploy.  
+   - The result is a fully operational **live website** accessible via the internet.  
 
-## Contact
-If you have any questions or comments about the my CI/CD project, please contact:
-Natasha - [email@example.com](mailto:email@example.com)
+10. **AWS CodePipeline (CI/CD Orchestration)**  
+    - Connects all services (GitHub → CodeBuild → S3 → CodeDeploy).  
+    - Ensures automated end-to-end delivery whenever new code is pushed.  
 
-- [LinkedIn](https://www.linkedin.com/in/natasha-ong/)
+---
 
-<br>
+## 📚 Project Phases
 
-## Conclusion
-Thank you for exploring this project! I'll continue to build this pipeline and apply my learnings to future projects.
+### 🔶 Phase 1: Web App Setup in AWS
+- Configure IAM user and key pair.  
+- Deploy initial Java app manually to EC2.  
+- Validate app accessibility via browser.  
 
-A big shoutout to **[NextWork](https://learn.nextwork.org/app)** for their project guide and support. [You can get started with this DevOps series project too by clicking here.](https://learn.nextwork.org/projects/aws-devops-vscode?track=high)
+### 🔶 Phase 2: GitHub Integration
+- Push project codebase to GitHub.  
+- Connect GitHub repo to AWS CodePipeline.  
+- Enable webhook triggers for automated builds.  
+
+### 🔶 Phase 3: Secure Dependencies with CodeArtifact
+- Set up a private package repository in CodeArtifact.  
+- Configure Maven to pull dependencies securely from CodeArtifact.  
+- Attach CodeArtifact policy to control access.  
+
+### 🔶 Phase 4: Continuous Integration with CodeBuild
+- Define build steps in `buildspec.yml`.  
+- Run automated builds and unit tests.  
+- Upload build artifacts to S3.  
+- Monitor build logs in CodeBuild console.  
+
+### 🔶 Phase 5: Automated Deployment with CodeDeploy
+- Create `appspec.yml` with deployment lifecycle hooks.  
+- Automate deployment to EC2 instances.  
+- Enable rollback on failure for reliability.  
+
+### 🔶 Phase 6: Full CI/CD Pipeline with CodePipeline
+- Connect all components into a pipeline: GitHub → CodeBuild → S3 → CodeDeploy.  
+- Achieve a fully automated source-build-deploy workflow.  
+- Deliver updates instantly upon code commit.  
+
+---
+
+## 🛠️ Tech Stack
+- **Language:** Java (JSP)  
+- **Version Control:** GitHub  
+- **CI/CD Tools:** AWS CodePipeline, CodeBuild, CodeDeploy  
+- **Artifact Management:** AWS CodeArtifact, Amazon S3  
+- **Infrastructure as Code:** AWS CloudFormation  
+- **Hosting:** Amazon EC2 (inside VPC)  
+- **Access & Security:** IAM, Key Pair Authentication  
+
+---
+
+## ✅ Key Features
+- End-to-end **automated CI/CD pipeline**.  
+- Secure **dependency management** with CodeArtifact.  
+- Full **infrastructure automation** with CloudFormation.  
+- Scalable deployment on **EC2 in VPC**.  
+- Rollback and monitoring built into deployment lifecycle.  
+
+---
+
+## 📌 References
+- [AWS CodePipeline Documentation](https://docs.aws.amazon.com/codepipeline/)  
+- [AWS CodeBuild Documentation](https://docs.aws.amazon.com/codebuild/)  
+- [AWS CodeDeploy Documentation](https://docs.aws.amazon.com/codedeploy/)  
+- [AWS CodeArtifact Documentation](https://docs.aws.amazon.com/codeartifact/)  
+
+---
+
+## 🙏 Acknowledgements
+Special thanks to the [NEXTWORK team](https://community.nextwork.org/c/all-aws-projects-e6e5db/devops-projects) for their structured 7-day guidance and resources.  
 
