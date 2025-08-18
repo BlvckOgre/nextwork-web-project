@@ -8,7 +8,7 @@ The pipeline integrates **source control, build automation, artifact management,
 ---
 
 ## 🏗️ Architecture Diagram
-![Architecture Diagram](./architecture-complete%20(1).png)
+![Architecture Diagram](./architecture.png)
 
 ---
 
